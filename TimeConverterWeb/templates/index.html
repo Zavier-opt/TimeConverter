@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Time Converter</h1>
+        
+        <div class="input-group">
+            <input type="text" id="input" placeholder="Enter timestamp or datetime" onkeypress="if(event.keyCode==13) convert()">
+            <select id="timezone">
+                {% for tz in timezones %}
+                <option value="{{ tz }}" {% if tz == default_timezone %}selected{% endif %}>{{ tz }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button onclick="convert()">Convert</button>
+        
+        <div id="error" class="error"></div>
+        <div id="result" class="result"></div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
