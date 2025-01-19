@@ -9,7 +9,7 @@
         <h1>Time Converter</h1>
         
         <div class="input-group">
-            <input type="text" id="input" placeholder="Enter timestamp or datetime" onkeypress="if(event.keyCode==13) convert()">
+            <input type="text" id="input" placeholder="Enter timestamp or datetime">
             <select id="timezone">
                 {% for tz in timezones %}
                 <option value="{{ tz }}" {% if tz == default_timezone %}selected{% endif %}>{{ tz }}</option>
@@ -17,7 +17,7 @@
             </select>
         </div>
         
-        <button onclick="convert()">Convert</button>
+        <button id="convertBtn">Convert</button>
         
         <div id="error" class="error"></div>
         <div id="result" class="result"></div>
