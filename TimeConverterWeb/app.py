@@ -4,9 +4,11 @@ import pytz
 from functools import wraps
 import os
 from werkzeug.security import check_password_hash, generate_password_hash
+from config import DevelopmentConfig
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # 为 session 添加密钥
+app.config.from_object(DevelopmentConfig)
 
 # 基本的请求速率限制
 class RateLimit:
@@ -199,7 +201,7 @@ def add_security_headers(response):
 
 if __name__ == '__main__':
     app.run(
-        debug=True,  # 开发模式
-        host='0.0.0.0',
-        port=5001
+        debug=app.config['DEBUG'],
+        host=app.config['HOST'],
+        port=app.config['PORT']
     ) 
