@@ -58,6 +58,10 @@ def validate_input(input_text):
 def convert_timestamp(timestamp_str):
     try:
         timestamp = float(timestamp_str)
+        # Check if it looks like a YYYYMMDD format
+        if len(timestamp_str) == 8 and 20000101 <= timestamp <= 29991231:
+            return None  # Let parse_datetime handle this
+        
         if timestamp > 1_000_000_000_000_000:  # Nanoseconds
             timestamp = timestamp / 1_000_000_000
         elif timestamp > 1_000_000_000_000:  # Microseconds
@@ -80,6 +84,12 @@ def convert_timestamp(timestamp_str):
 def parse_datetime(datetime_str, timezone):
     try:
         formats = [
+            # Add format for YYYYMMDD
+            "%Y%m%d",
+            # Add format for YYYYMMDD HH:MM
+            "%Y%m%d %H:%M",
+            # Add format for YYYYMMDD HH:MM:SS
+            "%Y%m%d %H:%M:%S",
             "%Y-%m-%d %H:%M:%S",
             "%Y-%m-%d %H:%M",
             "%Y-%m-%d %H",
@@ -92,8 +102,8 @@ def parse_datetime(datetime_str, timezone):
             try:
                 parsed_date = datetime.strptime(datetime_str, fmt)
                 
-                # If only date is provided (no time), return both 8:30 and 15:00
-                if fmt == "%Y-%m-%d":
+                # If only date is provided (no time components), return both 8:30 and 15:00
+                if fmt in ["%Y-%m-%d", "%Y%m%d"] and " " not in datetime_str:
                     results = []
                     # Morning time (8:30)
                     morning_date = datetime.combine(parsed_date.date(), time(8, 30))
